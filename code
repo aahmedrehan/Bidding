@@ -1,0 +1,32 @@
+pragma solidity ^0.4.25;
+
+contract Bidding {
+    
+    string public item = 'LCD';
+    address public owner;
+    address public maxBidder;
+    uint public maxBid;
+    
+    event bidPlaced(address , uint); 
+
+        modifier onlyBy() {
+            require (msg.sender == owner);
+            _;
+        }
+          function owner() {
+              owner = msg.sender;
+          }    
+    
+          function bid(uint bid) payable  {
+            
+            require(bid > maxBid);
+            bid = msg.value;
+            if (maxBid !=0) {
+                maxBidder.transfer(maxBid);
+            }
+                maxBidder = msg.sender;
+                maxBid    = msg.value;
+          
+          emit bidPlaced(maxBidder, maxBid);    
+        }
+    }
